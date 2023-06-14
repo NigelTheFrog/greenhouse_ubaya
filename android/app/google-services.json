@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "185647424603",
+    "project_id": "notifikasi-greenhouse",
+    "storage_bucket": "notifikasi-greenhouse.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185647424603:android:1f3023aacca51b066ccb7e",
+        "android_client_info": {
+          "package_name": "com.example.greenhouse_ubaya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185647424603-nl1upg2ebq2emsqi763njeetadfllsr5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARTbfohSDG2eerWwX1mCf-PDHNnHC48UY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "185647424603-nl1upg2ebq2emsqi763njeetadfllsr5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -19,7 +19,8 @@ class AccountList extends StatefulWidget {
 class _AccountListState extends State<AccountList> {
   Future<String> fetchData() async {
     final response = await http.post(
-      Uri.parse("http://localhost/tugas_akhir/account/daftaraccount.php"),
+      Uri.parse(
+          "https://ubaya.fun/flutter/160419017/images/account/daftaraccount.php"),
     );
     if (response.statusCode == 200) {
       return response.body;

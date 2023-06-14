@@ -42,7 +42,7 @@ class _LoginState extends State<Login> {
 
 void doLoginUser() async {
   final response = await http.post(
-      Uri.parse("http://192.168.137.1/tugas_akhir/account/login-account.php"),
+      Uri.parse("https://ubaya.fun/flutter/160419017/images/account/login-account.php"),
       body: {'username': _username});
   if (response.statusCode == 200) {
     Map json = jsonDecode(response.body);
@@ -86,7 +86,7 @@ void doLoginUser() async {
   void doChangeAccountStatus() async {
     final response = await http.post(
         Uri.parse(
-            "http://192.168.137.1/tugas_akhir/account/ubahstatusakun.php"),
+            "https://ubaya.fun/flutter/160419017/images/account/ubahstatusakun.php"),
         body: {'username': _username});
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
@@ -99,7 +99,7 @@ void doLoginUser() async {
   void doLoginPassword() async {
     final response = await http.post(
         Uri.parse(
-            "http://192.168.137.1/tugas_akhir/account/login-password.php"),
+            "https://ubaya.fun/flutter/160419017/images/account/login-password.php"),
         body: {'username': _username, 'password': _password});
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);

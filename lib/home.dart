@@ -20,7 +20,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Future<String> fetchData() async {
     final response = await http
-        .get(Uri.parse("http://192.168.137.1/tugas_akhir/raspberrylist.php"));
+        .get(Uri.parse("https://ubaya.fun/flutter/160419017/images/raspberrylist.php"));
     if (response.statusCode == 200) {
       return response.body;
     } else {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:greenhouse_ubaya/logchart.dart';
 import 'package:greenhouse_ubaya/loglist.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'setting.dart';
 
 class DetailSensor extends StatefulWidget {
   String sensor_id,

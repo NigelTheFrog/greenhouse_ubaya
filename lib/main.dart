@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greenhouse_ubaya/accountlist.dart';
 import 'package:greenhouse_ubaya/addraspi.dart';
 import 'package:greenhouse_ubaya/createaccount.dart';
@@ -6,7 +8,8 @@ import 'package:greenhouse_ubaya/drawer.dart';
 import 'package:greenhouse_ubaya/home.dart';
 import 'package:greenhouse_ubaya/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'setting.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 String active_user = "",
     email = "",
@@ -46,8 +49,10 @@ Future<String> getIdJabatan() async {
   return prefs.getString("jabatan_id") ?? '';
 }
 
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
   checkUser().then((String result) {
     if (result == '')
@@ -89,10 +94,9 @@ class MyApp extends StatelessWidget {
       routes: {
         "home": (context) => MyApp(),
         // "mycreation": (context) => MyCreation(),
-        "setting": (context) => Setting(),
         "/addraspi": (context) => AddRaspi(),
         "/account": (context) => AccountList(status: 1),
-        "/createaccount": (context) => CreateAccount()
+        "/createaccount": (context) => CreateAccount(),
       },
     );
   }
@@ -108,6 +112,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    permission();
+    configOneSignal();
+  }
 
   final List<Widget> _screens = [Home(), AccountList(status: 0)];
   final List<String> _title = [
@@ -142,6 +154,31 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       },
     );
+  }
+
+  void configOneSignal() async {
+    OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.none);
+    await OneSignal.shared.setAppId('4b7380fc-fa40-4717-85eb-6448710eef56');
+    OneSignal.shared.setNotificationWillShowInForegroundHandler((event) {
+      if (event.notification.title!.contains("Trouble")) {
+        if (id_jabatan == "3" || id_jabatan == "4") {
+          event.complete(null);
+        }
+      } else if (event.notification.title!.contains("Aksi")) {
+        if (id_jabatan == "2" || id_jabatan == "4") {
+          event.complete(null);
+        }
+      }
+    });
+  }
+
+  void permission() async {
+    await Permission.notification.isDenied.then((value) {
+      if (value) {
+        Permission.notification.request();
+      }
+    });
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
   @override
