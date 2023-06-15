@@ -50,6 +50,8 @@ class _MyDrawerState extends State<MyDrawer> {
   void doLogout() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("username");
+    prefs.remove("jabatan_id");
+    id_jabatan = "";
     main();
   }
 

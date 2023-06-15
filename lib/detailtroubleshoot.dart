@@ -32,7 +32,7 @@ class _DetailTroubleShootState extends State<DetailTroubleShoot> {
 
   Future<String> fetchData() async {
     final response = await http.post(
-        Uri.parse("http://192.168.137.1/tugas_akhir/error/detailerror.php"),
+        Uri.parse("https://ubaya.fun/flutter/160419017/images/detailerror.php"),
         body: {'id': widget.id});
     if (response.statusCode == 200) {
       return response.body;
@@ -41,20 +41,20 @@ class _DetailTroubleShootState extends State<DetailTroubleShoot> {
     }
   }
 
-bacaData() {
-  fetchData().then((value) {
-    Map json = jsonDecode(value);
-    _troubleshoot = Troubleshoot.fromJson(json['data']);
-    setState(() {
-      id.text = widget.id;
-      portSensor.text = _troubleshoot!.port_sensor;
-      lokasiSensor.text = _troubleshoot!.lokasi.toString();
-      keteranganError.text = _troubleshoot!.error_type;
-      solusi.text = _troubleshoot!.solusi.toString();
-      error_code = _troubleshoot!.error_id;
+  bacaData() {
+    fetchData().then((value) {
+      Map json = jsonDecode(value);
+      _troubleshoot = Troubleshoot.fromJson(json['data']);
+      setState(() {
+        id.text = widget.id;
+        portSensor.text = _troubleshoot!.port_sensor;
+        lokasiSensor.text = _troubleshoot!.lokasi.toString();
+        keteranganError.text = _troubleshoot!.error_type;
+        solusi.text = _troubleshoot!.solusi.toString();
+        error_code = _troubleshoot!.error_id;
+      });
     });
-  });
-}
+  }
 
   @override
   void initState() {

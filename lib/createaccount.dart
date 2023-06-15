@@ -26,7 +26,8 @@ class CreateAccountState extends State<CreateAccount> {
 
   void submit(BuildContext context) async {
     final response = await http.post(
-        Uri.parse("http://192.168.137.1/tugas_akhir/account/createaccount.php"),
+        Uri.parse(
+            "https://ubaya.fun/flutter/160419017/images/account/createaccount.php"),
         body: {
           'username': username,
           'email': email,
@@ -39,26 +40,26 @@ class CreateAccountState extends State<CreateAccount> {
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Success"),
-            content: Container(
-                height: 70,
-                width: 300,
-                child: Text("Data $username berhasil ditambahkan")),
-            actions: [
-              TextButton(
-                child: Text("Ok"),
-                onPressed: () {
-                  Navigator.popAndPushNamed(context, "home");
-                },
-              ),
-            ],
-          );
-        },
-      );
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Success"),
+              content: Container(
+                  height: 70,
+                  width: 300,
+                  child: Text("Data $username berhasil ditambahkan")),
+              actions: [
+                TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, "home");
+                  },
+                ),
+              ],
+            );
+          },
+        );
       } else if (json['Error'] ==
           "Duplicate entry '$username' for key 'PRIMARY'") {
         setState(() {
@@ -205,7 +206,7 @@ class CreateAccountState extends State<CreateAccount> {
                               Map json;
                               var response = await http.post(
                                   Uri.parse(
-                                      "http://192.168.137.1/tugas_akhir/jabatan.php"),
+                                      "https://ubaya.fun/flutter/160419017/images//jabatan.php"),
                                   body: {'cari': text});
 
                               if (response.statusCode == 200) {

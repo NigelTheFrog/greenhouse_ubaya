@@ -17,7 +17,7 @@ class TroubleShootList extends StatefulWidget {
 class _TroubleShootListState extends State<TroubleShootList> {
   Future<String> fetchData() async {
     final response = await http.post(
-        Uri.parse("http://192.168.137.1/tugas_akhir/error/errorlist.php"),
+        Uri.parse("https://ubaya.fun/flutter/160419017/images/errorlist.php"),
         body: {'raspberry_id': widget.raspberry_id});
     if (response.statusCode == 200) {
       return response.body;
@@ -98,10 +98,10 @@ class _TroubleShootListState extends State<TroubleShootList> {
                                   ))))
                     ],
                   )));
-      },
-    );
+        },
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {

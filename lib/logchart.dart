@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LogChart extends StatefulWidget {
   String sensor_id,
@@ -30,6 +31,8 @@ class LogChart extends StatefulWidget {
   }
 }
 
+String jabatan_id = "";
+
 class _LogChartState extends State<LogChart> {
   TextEditingController startdatecontroller = TextEditingController(),
       enddatecontroller = TextEditingController();
@@ -39,7 +42,8 @@ class _LogChartState extends State<LogChart> {
 
   Future<String> fetchData() async {
     final response = await http.post(
-        Uri.parse("http://192.168.173.1/tugas_akhir/log/logchart.php"),
+        Uri.parse(
+            "https://ubaya.fun/flutter/160419017/images/log/logchart.php"),
         body: {
           'startdate': startdate,
           'enddate': enddate,
@@ -52,10 +56,18 @@ class _LogChartState extends State<LogChart> {
     }
   }
 
+  _loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      jabatan_id = prefs.getString("jabatan_id") ?? '';
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _loadData();
     initializeDateFormatting();
     var date = DateTime.now();
     startdatecontroller.text = DateFormat.yMMMMEEEEd('id').format(date);
@@ -92,10 +104,10 @@ class _LogChartState extends State<LogChart> {
                 // Map color for each data points from the data source
                 pointColorMapper: (Log data, _) {
                   if (widget.nama_sensor == "Sensor Cahaya") {
-                    if (data.average! > 750 || data.average! < 300) {
+                    if (data.average! > 900 || data.average! < 100) {
                       return Colors.red;
-                    } else if (data.average! >= 300 && data.average! <= 400 ||
-                        data.average! >= 600 && data.average! <= 750) {
+                    } else if (data.average! <= 900 && data.average! >= 400 ||
+                        data.average! >= 100 && data.average! <= 200) {
                       return Colors.yellow;
                     } else {
                       return Colors.lightGreen;
@@ -105,6 +117,25 @@ class _LogChartState extends State<LogChart> {
                       return Colors.red;
                     } else if (data.average! >= 18 && data.average! <= 20 ||
                         data.average! >= 25 && data.average! <= 27) {
+                      return Colors.yellow;
+                    } else {
+                      return Colors.lightGreen;
+                    }
+                  } else if ((widget.nama_sensor ==
+                      "Sensor Kelembaban Tanah")) {
+                    if (data.average! > 750 || data.average! < 250) {
+                      return Colors.red;
+                    } else if (data.average! >= 250 && data.average! <= 400 ||
+                        data.average! >= 600 && data.average! <= 750) {
+                      return Colors.yellow;
+                    } else {
+                      return Colors.lightGreen;
+                    }
+                  } else {
+                    if (data.average! < 5.5 || data.average! > 8) {
+                      return Colors.red;
+                    } else if (data.average! >= 5.5 && data.average! <= 6.5 ||
+                        data.average! >= 7 && data.average! <= 8) {
                       return Colors.yellow;
                     } else {
                       return Colors.lightGreen;
@@ -193,98 +224,205 @@ class _LogChartState extends State<LogChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-      padding: EdgeInsets.only(top: 20),
-      alignment: Alignment.topCenter,
-      child: SingleChildScrollView(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                "Sensor ID: ${widget.sensor_id}",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )),
-          Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                "Nama Sensor: ${widget.nama_sensor}, Port: ${widget.port_sensor}",
-                style: TextStyle(
-                    color: Color.fromARGB(255, 92, 92, 92), fontSize: 13),
-              )),
-          Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                "Aktuator: ${widget.nama_aktuator}, Port: ${widget.port_aktuator}",
-                style: TextStyle(
-                    color: Color.fromARGB(255, 92, 92, 92), fontSize: 13),
-              )),
-          Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                "\nPILIH TANGGAL UNTUK MELAKUKAN FILTRASI DATA",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )),
-          Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                "Satuan: ${widget.satuan}, Toleransi: ${widget.toleransi}",
-                style: TextStyle(
-                    color: Color.fromARGB(255, 92, 92, 92), fontSize: 13),
-              )),
-          Container(
-              alignment: Alignment.topCenter,
-              width: 700,
-              child: MediaQuery.of(context).size.width >= 650
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [buildStartDate(), buildEndDate()],
-                    )
-                  : Column(
-                      children: [buildStartDate(), buildEndDate()],
+    if (jabatan_id != "4") {
+      return Scaffold(
+          body: Container(
+        padding: EdgeInsets.only(top: 20),
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                padding: EdgeInsets.only(bottom: 10),
+                alignment: Alignment.topCenter,
+                child: Text(
+                  "Sensor ID: ${widget.sensor_id}",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                )),
+            Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  "Nama Sensor: ${widget.nama_sensor}, Port: ${widget.port_sensor}",
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 92, 92, 92), fontSize: 13),
+                )),
+            Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  "Aktuator: ${widget.nama_aktuator}, Port: ${widget.port_aktuator}",
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 92, 92, 92), fontSize: 13),
+                )),
+            Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  "Satuan: ${widget.satuan}, Toleransi: ${widget.toleransi}",
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 92, 92, 92), fontSize: 13),
+                )),
+            Container(
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+                alignment: Alignment.topCenter,
+                child: Text(
+                  "PILIH TANGGAL UNTUK MELAKUKAN FILTRASI DATA",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                )),
+            Container(
+                alignment: Alignment.topCenter,
+                width: 700,
+                child: MediaQuery.of(context).size.width >= 650
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [buildStartDate(), buildEndDate()],
+                      )
+                    : Column(
+                        children: [buildStartDate(), buildEndDate()],
+                      )),
+            Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  widget.nama_sensor == "Sensor Kelembaban Tanah"
+                      ? "\nSTANDAR PENGUKURAN \nSENSOR KELEMBABAN TANAH"
+                      : widget.nama_sensor == "Sensor Cahaya"
+                          ? ""
+                          : widget.nama_sensor == "Sensor Suhu"
+                              ? "\nSTANDAR PENGUKURAN \nSENSOR SUHU RUANGAN"
+                              : "\nSTANDAR PENGUKURAN \nSENSOR KEASAMAN TANAH",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  textAlign: TextAlign.center,
+                )),
+            Container(
+              padding: EdgeInsets.only(top: 5, bottom: 5),
+              height: 90,
+              alignment: Alignment.center,
+              width: 600,
+              child: widget.nama_sensor == "Sensor Kelembaban Tanah"
+                  ? Image.asset("assets/images/legend-soil-moisture.png")
+                  : widget.nama_sensor == "Sensor Cahaya"
+                      ? Image.asset("")
+                      : widget.nama_sensor == "Sensor Suhu"
+                          ? Image.asset("assets/images/legend-temperature.png")
+                          : Image.asset("assets/images/legend-ph.png"),
+            ),
+            SizedBox(
+                height: 500,
+                width: 500,
+                child: FutureBuilder(
+                    future: fetchData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return logChart(snapshot.data.toString());
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    })),
+          ],
+        )),
+      ));
+    } else {
+      return Scaffold(
+          appBar: AppBar(title: Text("Log Chart")),
+          body: Container(
+            padding: EdgeInsets.only(top: 20),
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    padding: EdgeInsets.only(bottom: 10),
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      "Sensor ID: ${widget.sensor_id}",
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     )),
-          Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                widget.nama_sensor == "Sensor Kelembaban Tanah"
-                    ? "\nSTANDAR PENGUKURAN \nSENSOR KELEMBABAN TANAH"
-                    : widget.nama_sensor == "Sensor Cahaya"
-                        ? ""
-                        : widget.nama_sensor == "Sensor Suhu"
-                            ? "\nSTANDAR PENGUKURAN \nSENSOR SUHU RUANGAN"
-                            : "\nSTANDAR PENGUKURAN \nSENSOR KEASAMAN TANAH",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                textAlign: TextAlign.center,
-              )),
-          Container(
-            padding: EdgeInsets.only(top: 5, bottom: 5),
-            height: 90,
-            alignment: Alignment.center,
-            width: 600,
-            child: widget.nama_sensor == "Sensor Kelembaban Tanah"
-                ? Image.asset("assets/images/legend-soil-moisture.png")
-                : widget.nama_sensor == "Sensor Cahaya"
-                    ? Image.asset("")
-                    : widget.nama_sensor == "Sensor Suhu"
-                        ? Image.asset("assets/images/legend-temperature.png")
-                        : Image.asset("assets/images/legend-ph.png"),
-          ),
-          SizedBox(
-              height: 500,
-              width: 500,
-              child: FutureBuilder(
-                  future: fetchData(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return logChart(snapshot.data.toString());
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  })),
-        ],
-      )),
-    ));
+                Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      "Nama Sensor: ${widget.nama_sensor}, Port: ${widget.port_sensor}",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 92, 92, 92), fontSize: 13),
+                    )),
+                Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      "Aktuator: ${widget.nama_aktuator}, Port: ${widget.port_aktuator}",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 92, 92, 92), fontSize: 13),
+                    )),
+                Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      "Satuan: ${widget.satuan}, Toleransi: ${widget.toleransi}",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 92, 92, 92), fontSize: 13),
+                    )),
+                Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      "PILIH TANGGAL UNTUK MELAKUKAN FILTRASI DATA",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    )),
+                Container(
+                    alignment: Alignment.topCenter,
+                    width: 700,
+                    child: MediaQuery.of(context).size.width >= 650
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [buildStartDate(), buildEndDate()],
+                          )
+                        : Column(
+                            children: [buildStartDate(), buildEndDate()],
+                          )),
+                Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      widget.nama_sensor == "Sensor Kelembaban Tanah"
+                          ? "\nSTANDAR PENGUKURAN \nSENSOR KELEMBABAN TANAH"
+                          : widget.nama_sensor == "Sensor Cahaya"
+                              ? ""
+                              : widget.nama_sensor == "Sensor Suhu"
+                                  ? "\nSTANDAR PENGUKURAN \nSENSOR SUHU RUANGAN"
+                                  : "\nSTANDAR PENGUKURAN \nSENSOR KEASAMAN TANAH",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      textAlign: TextAlign.center,
+                    )),
+                Container(
+                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                  height: 90,
+                  alignment: Alignment.center,
+                  width: 600,
+                  child: widget.nama_sensor == "Sensor Kelembaban Tanah"
+                      ? Image.asset("assets/images/legend-soil-moisture.png")
+                      : widget.nama_sensor == "Sensor Cahaya"
+                          ? Image.asset("")
+                          : widget.nama_sensor == "Sensor Suhu"
+                              ? Image.asset(
+                                  "assets/images/legend-temperature.png")
+                              : Image.asset("assets/images/legend-ph.png"),
+                ),
+                SizedBox(
+                    height: 500,
+                    width: 500,
+                    child: FutureBuilder(
+                        future: fetchData(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return logChart(snapshot.data.toString());
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        })),
+              ],
+            )),
+          ));
+    }
   }
 }

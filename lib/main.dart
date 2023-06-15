@@ -49,7 +49,6 @@ Future<String> getIdJabatan() async {
   return prefs.getString("jabatan_id") ?? '';
 }
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -117,8 +116,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    permission();
-    configOneSignal();
+    if (!kIsWeb) {
+      permission();
+      configOneSignal();
+    }
   }
 
   final List<Widget> _screens = [Home(), AccountList(status: 0)];
@@ -130,6 +131,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void doLogout() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("username");
+    prefs.remove("jabatan_id");
+    id_jabatan = "";
     main();
   }
 
@@ -161,14 +164,17 @@ class _MyHomePageState extends State<MyHomePage> {
     await OneSignal.shared.setAppId('4b7380fc-fa40-4717-85eb-6448710eef56');
     OneSignal.shared.setNotificationWillShowInForegroundHandler((event) {
       if (event.notification.title!.contains("Trouble")) {
-        if (id_jabatan == "3" || id_jabatan == "4") {
-          event.complete(null);
+        if (id_jabatan != "") {
+          if (id_jabatan == "3" || id_jabatan == "4") {
+            event.complete(null);
+          }
+        } else if (event.notification.title!.contains("Aksi")) {
+          if (id_jabatan == "2" || id_jabatan == "4") {
+            event.complete(null);
+          }
         }
-      } else if (event.notification.title!.contains("Aksi")) {
-        if (id_jabatan == "2" || id_jabatan == "4") {
-          event.complete(null);
-        }
-      }
+      } else
+        event.complete(null);
     });
   }
 

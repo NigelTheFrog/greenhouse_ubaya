@@ -40,7 +40,8 @@ class DetailAccountState extends State<DetailAccount> {
 
   Future<String> fetchData() async {
     final response = await http.post(
-        Uri.parse("http://192.168.137.1/tugas_akhir/account/detailaccount.php"),
+        Uri.parse(
+            "https://ubaya.fun/flutter/160419017/images/account/detailaccount.php"),
         body: {'username': widget.username});
     if (response.statusCode == 200) {
       return response.body;
@@ -51,7 +52,8 @@ class DetailAccountState extends State<DetailAccount> {
 
   void changeAccount(int change) async {
     final response = await http.post(
-        Uri.parse("http://192.168.137.1/tugas_akhir/account/ubahakun.php"),
+        Uri.parse(
+            "https://ubaya.fun/flutter/160419017/images/account/ubahakun.php"),
         body: {
           'username': widget.username,
           'nama_depan': namaDepan,
@@ -121,8 +123,8 @@ class DetailAccountState extends State<DetailAccount> {
         showSearchBox: false,
         onFind: (text) async {
           Map json;
-          var response = await http
-              .post(Uri.parse("http://localhost/tugas_akhir/jabatan.php"));
+          var response = await http.post(Uri.parse(
+              "https://ubaya.fun/flutter/160419017/images/jabatan.php"));
 
           if (response.statusCode == 200) {
             json = jsonDecode(response.body);

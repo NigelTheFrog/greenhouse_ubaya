@@ -57,7 +57,7 @@ class AddSensorState extends State<AddSensor> {
       sensor_name = sensorList.first,
       actuator_name = actuatorList.first,
       actuator_port = actuatorPortList.first,
-      note = "",
+      lokasi = "",
       satuan = "wfv",
       id = "";
   String sensorpict = "assets/images/soil-moisture-sensor.jpg",
@@ -68,16 +68,27 @@ class AddSensorState extends State<AddSensor> {
   double nilaiToleransi = 0;
 
   void submit(BuildContext context) async {
+    print(widget.raspberry_id);
+    print("${sensor_port}-$id-${actuator_port}-${widget.raspberry_id}");
+    print(sensor_name);
+    print(sensor_port);
+    print(actuator_name);
+    print(actuator_port);
+    print(nilaiToleransi.toString());
+    print(lokasi);
+    print(satuan);
     final response = await http.post(
-        Uri.parse("http://192.168.137.1/tugas_akhir/sensor/addsensor.php"),
+        Uri.parse(
+            "https://ubaya.fun/flutter/160419017/images/sensor/addsensor.php"),
         body: {
           'raspberry_id': widget.raspberry_id,
-          'id': "${sensor_port}-$id-${actuator_port}",
+          'id': "${sensor_port}-$id-${actuator_port}-${widget.raspberry_id}",
           'nama_sensor': sensor_name,
           'port_sensor': sensor_port,
           'nama_aktuator': actuator_name,
           'port_aktuator': actuator_port,
-          'toleransi': nilaiToleransi.toString(),
+          'toleransi': nilaiToleransi.toStringAsFixed(3),
+          'lokasi': lokasi,
           'satuan': satuan
         });
     if (response.statusCode == 200) {
@@ -95,7 +106,7 @@ class AddSensorState extends State<AddSensor> {
         );
       } else {
         setState(() {
-          error_create = json['messgae'];
+          error_create = json['Error'];
         });
       }
     } else {
@@ -170,7 +181,7 @@ class AddSensorState extends State<AddSensor> {
               alignment: Alignment.topCenter,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                image: NetworkImage(actuatorpict),
+                image: AssetImage(actuatorpict),
                 fit: BoxFit.fill,
                 // alignment: Alignment.topCenter,
               ))),
@@ -256,7 +267,7 @@ class AddSensorState extends State<AddSensor> {
             alignment: Alignment.topCenter,
             decoration: BoxDecoration(
                 image: DecorationImage(
-              image: NetworkImage(sensorpict),
+              image: AssetImage(sensorpict),
               fit: BoxFit.fill,
               // alignment: Alignment.topCenter,
             ))),
@@ -386,7 +397,7 @@ class AddSensorState extends State<AddSensor> {
                 child: TextField(
                   onChanged: (value) {
                     setState(() {
-                      note = value;
+                      lokasi = value;
                     });
                   },
                   decoration: const InputDecoration(
@@ -411,7 +422,7 @@ class AddSensorState extends State<AddSensor> {
                           nilaiToleransi = ((pi *
                                       pow((diameterSelang / 2), 2) *
                                       tinggiSelang) /
-                                  volumeTanah) *
+                                  (volumeTanah * 1000)) *
                               100;
                         } else if (sensor_name == "Sensor Suhu") {
                           nilaiToleransi = 0.5;

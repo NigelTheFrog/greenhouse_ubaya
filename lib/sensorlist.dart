@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:greenhouse_ubaya/addsensor.dart';
 import 'package:greenhouse_ubaya/class/sensor.dart';
 import 'package:greenhouse_ubaya/detailsensor.dart';
+import 'package:greenhouse_ubaya/logchart.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,7 +22,8 @@ class SensorList extends StatefulWidget {
 class _SensorListState extends State<SensorList> {
   Future<String> fetchData() async {
     final response = await http.post(
-        Uri.parse("http://192.168.137.1/tugas_akhir/sensor/sensorlist.php"),
+        Uri.parse(
+            "https://ubaya.fun/flutter/160419017/images/sensor/sensorlist.php"),
         body: {'raspberry_id': widget.raspberry_id});
     if (response.statusCode == 200) {
       return response.body;
@@ -72,27 +74,51 @@ class _SensorListState extends State<SensorList> {
                       GestureDetector(
                           onTap: () {
                             if (sensor2[index].nama_sensor != "Sensor Air") {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DetailSensor(
-                                      sensor_id: sensor2[index].id,
-                                      nama_sensor: sensor2[index].nama_sensor,
-                                      port_sensor: sensor2[index].port_sensor,
-                                      nama_aktuator:
-                                          sensor2[index].nama_aktuator,
-                                      port_aktuator:
-                                          sensor2[index].port_aktuator,
-                                      satuan: sensor2[index].satuan,
-                                      toleransi: sensor2[index].nama_sensor ==
-                                              "Sensor Suhu"
-                                          ? "${sensor2[index].toleransi}°C"
-                                          : sensor2[index].nama_sensor ==
-                                                  "Sensor pH"
-                                              ? "${sensor2[index].toleransi}%"
-                                              : sensor2[index].toleransi),
-                                ),
-                              );
+                              if (jabatan_id != "4") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailSensor(
+                                        sensor_id: sensor2[index].id,
+                                        nama_sensor: sensor2[index].nama_sensor,
+                                        port_sensor: sensor2[index].port_sensor,
+                                        nama_aktuator:
+                                            sensor2[index].nama_aktuator,
+                                        port_aktuator:
+                                            sensor2[index].port_aktuator,
+                                        satuan: sensor2[index].satuan,
+                                        toleransi: sensor2[index].nama_sensor ==
+                                                "Sensor Suhu"
+                                            ? "${sensor2[index].toleransi}°C"
+                                            : sensor2[index].nama_sensor ==
+                                                    "Sensor Cahaya"
+                                                ? "-"
+                                                : "${sensor2[index].toleransi}%"),
+                                  ),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LogChart(
+                                        sensor_id: sensor2[index].id,
+                                        nama_sensor: sensor2[index].nama_sensor,
+                                        port_sensor: sensor2[index].port_sensor,
+                                        nama_aktuator:
+                                            sensor2[index].nama_aktuator,
+                                        port_aktuator:
+                                            sensor2[index].port_aktuator,
+                                        satuan: sensor2[index].satuan,
+                                        toleransi: sensor2[index].nama_sensor ==
+                                                "Sensor Suhu"
+                                            ? "${sensor2[index].toleransi}°C"
+                                            : sensor2[index].nama_sensor ==
+                                                    "Sensor Cahaya"
+                                                ? "-"
+                                                : "${sensor2[index].toleransi}%"),
+                                  ),
+                                );
+                              }
                             }
                           },
                           child: Card(

@@ -37,7 +37,7 @@ class _LogListState extends State<LogList> {
 
   Future<String> fetchData() async {
     final response = await http.post(
-        Uri.parse("http://192.168.137.1/tugas_akhir/log/loglist.php"),
+        Uri.parse("https://ubaya.fun/flutter/160419017/images/log/loglist.php"),
         body: {'tanggal': date, 'sensor_id': widget.sensor_id});
     if (response.statusCode == 200) {
       return response.body;
@@ -120,13 +120,13 @@ class _LogListState extends State<LogList> {
                                         : Color.fromARGB(255, 72, 225, 85);
                               } else if ((widget.nama_sensor ==
                                   "Sensor Cahaya")) {
-                                return element.value! > 750 ||
-                                        element.value! < 300
+                                return element.value! > 900 ||
+                                        element.value! < 100
                                     ? Color.fromARGB(255, 255, 96, 85)
-                                    : element.value! >= 300 &&
-                                                element.value! <= 400 ||
-                                            element.value! >= 600 &&
-                                                element.value! <= 750
+                                    : data.average! <= 900 &&
+                                                data.average! >= 400 ||
+                                            data.average! >= 100 &&
+                                                data.average! <= 200
                                         ? Color.fromARGB(255, 250, 233, 75)
                                         : Color.fromARGB(255, 72, 225, 85);
                               } else {
@@ -168,11 +168,13 @@ class _LogListState extends State<LogList> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Align(
+          Container(
+              padding: EdgeInsets.only(bottom: 10),
               alignment: Alignment.topCenter,
               child: Text(
                 "Sensor ID: ${widget.sensor_id}",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               )),
           Align(
               alignment: Alignment.topCenter,
@@ -195,11 +197,12 @@ class _LogListState extends State<LogList> {
                 style: TextStyle(
                     color: Color.fromARGB(255, 92, 92, 92), fontSize: 13),
               )),
-          Align(
+          Container(
+              padding: EdgeInsets.only(top: 10, bottom: 10),
               alignment: Alignment.topCenter,
               child: Text(
-                "\nPILIH TANGGAL UNTUK MELAKUKAN FILTRASI DATA",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                "PILIH TANGGAL UNTUK MELAKUKAN FILTRASI DATA",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               )),
           SizedBox(
             height: 50,
@@ -264,7 +267,7 @@ class _LogListState extends State<LogList> {
           Container(
             width: 450,
             alignment: Alignment.topCenter,
-            padding: EdgeInsets.only(top: 20, bottom: 20),
+            padding: EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -278,7 +281,7 @@ class _LogListState extends State<LogList> {
             ),
           ),
           Container(
-              height: 500,
+              height: 600,
               width: 500,
               alignment: Alignment.topCenter,
               child: FutureBuilder(

@@ -27,14 +27,32 @@ class AddRaspiState extends State<AddRaspi> {
 
   void submit(BuildContext context) async {
     final response = await http.post(
-        Uri.parse("http://192.168.137.1/tugas_akhir/addraspi.php"),
+        Uri.parse("https://ubaya.fun/flutter/160419017/images/addraspi.php"),
         body: {'raspberry_id': id, 'type': raspi, 'note': note});
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Data telah berhasil ditambahkan')));
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Success"),
+              content: Container(
+                  height: 70,
+                  width: 300,
+                  child: Text("Raspberry dengan id $id berhasil ditambahkan")),
+              actions: [
+                TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, "home");
+                  },
+                ),
+              ],
+            );
+          },
+        );
         Navigator.popAndPushNamed(context, "home");
       }
     } else {
@@ -78,7 +96,7 @@ class AddRaspiState extends State<AddRaspi> {
                             alignment: Alignment.topCenter,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                              image: NetworkImage(raspipict),
+                              image: AssetImage(raspipict),
                               fit: BoxFit.fill,
                               // alignment: Alignment.topCenter,
                             ))),
