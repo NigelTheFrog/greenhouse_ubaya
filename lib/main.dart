@@ -159,24 +159,31 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void configOneSignal() async {
-    OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.none);
-    await OneSignal.shared.setAppId('4b7380fc-fa40-4717-85eb-6448710eef56');
-    OneSignal.shared.setNotificationWillShowInForegroundHandler((event) {
-      if (event.notification.title!.contains("Trouble")) {
-        if (id_jabatan != "") {
-          if (id_jabatan == "3" || id_jabatan == "4") {
-            event.complete(null);
-          }
-        } else if (event.notification.title!.contains("Aksi")) {
-          if (id_jabatan == "2" || id_jabatan == "4") {
-            event.complete(null);
-          }
+void configOneSignal() async {
+  final prefs = await SharedPreferences.getInstance();
+  OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.none);
+  await OneSignal.shared.setAppId('4b7380fc-fa40-4717-85eb-6448710eef56');
+  OneSignal.shared.setNotificationWillShowInForegroundHandler((event) {
+    if (active_user == "" || !prefs.containsKey("username")) {
+      event.complete(null);
+    } else {
+      if (event.notification.title!.contains("Trouble") ||
+          event.notification.title!.contains("Peringatan")) {
+        if (id_jabatan == "1" || id_jabatan == "2") {
+          event.complete(event.notification);
+        } else {
+          event.complete(null);
         }
-      } else
-        event.complete(null);
-    });
-  }
+      } else if (event.notification.title!.contains("Aksi")) {
+        if (id_jabatan == "1" || id_jabatan == "3") {
+          event.complete(event.notification);
+        } else {
+          event.complete(null);
+        }
+      }
+    }
+  });
+}
 
   void permission() async {
     await Permission.notification.isDenied.then((value) {

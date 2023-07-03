@@ -24,15 +24,16 @@ class AddRaspiState extends State<AddRaspi> {
   String raspipict = "assets/images/raspberry-pi-3.jpg", note = "";
   String error_create = "";
   int rand = 0;
+  TextEditingController noteController = TextEditingController();
 
   void submit(BuildContext context) async {
     final response = await http.post(
-        Uri.parse("https://ubaya.fun/flutter/160419017/images/addraspi.php"),
+        Uri.parse(
+            "https://ubaya.fun/native/160419026/tugas_akhir/addraspi.php"),
         body: {'raspberry_id': id, 'type': raspi, 'note': note});
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
-        if (!mounted) return;
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -53,7 +54,6 @@ class AddRaspiState extends State<AddRaspi> {
             );
           },
         );
-        Navigator.popAndPushNamed(context, "home");
       }
     } else {
       throw Exception('Failed to read API');
@@ -146,6 +146,7 @@ class AddRaspiState extends State<AddRaspi> {
                         width: 300,
                         padding: EdgeInsets.all(10),
                         child: TextField(
+                          controller: noteController,
                           onChanged: (value) {
                             setState(() {
                               note = value;
@@ -169,7 +170,7 @@ class AddRaspiState extends State<AddRaspi> {
                                 borderRadius: BorderRadius.circular(20)),
                             child: ElevatedButton(
                               onPressed: () {
-                                if (note == "") {
+                                if (note == "" || noteController.text == "") {
                                   setState(() {
                                     error_create = "Lokasi harus diisi";
                                   });

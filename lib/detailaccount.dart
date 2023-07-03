@@ -41,7 +41,7 @@ class DetailAccountState extends State<DetailAccount> {
   Future<String> fetchData() async {
     final response = await http.post(
         Uri.parse(
-            "https://ubaya.fun/flutter/160419017/images/account/detailaccount.php"),
+            "https://ubaya.fun/native/160419026/tugas_akhir/account/detailaccount.php"),
         body: {'username': widget.username});
     if (response.statusCode == 200) {
       return response.body;
@@ -53,7 +53,7 @@ class DetailAccountState extends State<DetailAccount> {
   void changeAccount(int change) async {
     final response = await http.post(
         Uri.parse(
-            "https://ubaya.fun/flutter/160419017/images/account/ubahakun.php"),
+            "https://ubaya.fun/native/160419026/tugas_akhir/account/ubahakun.php"),
         body: {
           'username': widget.username,
           'nama_depan': namaDepan,
@@ -124,7 +124,7 @@ class DetailAccountState extends State<DetailAccount> {
         onFind: (text) async {
           Map json;
           var response = await http.post(Uri.parse(
-              "https://ubaya.fun/flutter/160419017/images/jabatan.php"));
+              "https://ubaya.fun/native/160419026/tugas_akhir/jabatan.php"));
 
           if (response.statusCode == 200) {
             json = jsonDecode(response.body);

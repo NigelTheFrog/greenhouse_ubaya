@@ -17,7 +17,8 @@ class TroubleShootList extends StatefulWidget {
 class _TroubleShootListState extends State<TroubleShootList> {
   Future<String> fetchData() async {
     final response = await http.post(
-        Uri.parse("https://ubaya.fun/flutter/160419017/images/errorlist.php"),
+        Uri.parse(
+            "https://ubaya.fun/native/160419026/tugas_akhir/error/errorlist.php"),
         body: {'raspberry_id': widget.raspberry_id});
     if (response.statusCode == 200) {
       return response.body;
@@ -59,6 +60,7 @@ class _TroubleShootListState extends State<TroubleShootList> {
                                 builder: (context) => DetailTroubleShoot(
                                   id: error2[index].id,
                                   nama_sensor: error2[index].nama_sensor,
+                                  error_code: error2[index].error_id,
                                 ),
                               ),
                             );
@@ -82,8 +84,12 @@ class _TroubleShootListState extends State<TroubleShootList> {
                                                       "Sensor Suhu"
                                                   ? Image.asset(
                                                       "assets/images/dht-11.jpg")
-                                                  : Image.asset(
-                                                      "assets/images/dht-11.jpg"),
+                                                  : error2[index].nama_sensor ==
+                                                          "Sensor pH"
+                                                      ? Image.asset(
+                                                          "assets/images/ph.jpg")
+                                                      : Image.asset(
+                                                          "assets/images/water-sensor.png"),
                                     ),
                                     title: Text(error2[index].nama_sensor),
                                     subtitle: Text(

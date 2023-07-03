@@ -33,6 +33,7 @@ class _LoginState extends State<Login> {
   String _username = "", _password = "", error_login = "", _email = "";
   double height = 101;
   int status = 0, countWrong = 0;
+  TextEditingController controllerPassword = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -40,53 +41,55 @@ class _LoginState extends State<Login> {
     _username = "";
   }
 
-void doLoginUser() async {
-  final response = await http.post(
-      Uri.parse("https://ubaya.fun/flutter/160419017/images/account/login-account.php"),
-      body: {'username': _username});
-  if (response.statusCode == 200) {
-    Map json = jsonDecode(response.body);
-    if (json['result'] == 'success') {
-      _username = json['data']['username'];
-      _email = json['data']['email'];
-      final prefs = await SharedPreferences.getInstance();
-      if (json['data']['status'] == 1) {
+  void doLoginUser() async {
+    final response = await http.post(
+        Uri.parse(
+            "https://ubaya.fun/native/160419026/tugas_akhir/account/login-account.php"),
+        body: {'username': _username});
+    if (response.statusCode == 200) {
+      Map json = jsonDecode(response.body);
+      if (json['result'] == 'success') {
+        _username = json['data']['username'];
+        _email = json['data']['email'];
+        final prefs = await SharedPreferences.getInstance();
+        if (json['data']['status'] == 1) {
+          setState(() {
+            error_login = "";
+            height = 150;
+            status = 1;
+            textInputPassword = TextField(
+              controller: controllerPassword,
+              onChanged: (value) {
+                _password = value;
+              },
+              obscureText: true,
+              decoration: InputDecoration(
+                  labelText: 'Password', hintText: 'Isikan password'),
+              enabled: status == 1 ? true : false,
+            );
+          });
+        } else if (json['data']['status'] == 0) {
+          setState(() {
+            error_login = "Akun telah diblokir silahkan tekan ganti password";
+            status = 2;
+          });
+        }
+      } else {
         setState(() {
-          error_login = "";
-          height = 150;
-          status = 1;
-          textInputPassword = TextField(
-            onChanged: (value) {
-              _password = value;
-            },
-            obscureText: true,
-            decoration: InputDecoration(
-                labelText: 'Password', hintText: 'Isikan password'),
-            enabled: status == 1 ? true : false,
-          );
-        });
-      } else if (json['data']['status'] == 0) {
-        setState(() {
-          error_login = "Akun telah diblokir silahkan tekan ganti password";
-          status = 2;
+          error_login = "Username tidak ditemukan";
         });
       }
     } else {
       setState(() {
-        error_login = "Username tidak ditemukan";
+        error_login = "Periksa kembali koneksi anda";
       });
     }
-  } else {
-    setState(() {
-      error_login = "Periksa kembali koneksi anda";
-    });
   }
-}
 
   void doChangeAccountStatus() async {
     final response = await http.post(
         Uri.parse(
-            "https://ubaya.fun/flutter/160419017/images/account/ubahstatusakun.php"),
+            "https://ubaya.fun/native/160419026/tugas_akhir/account/ubahstatusakun.php"),
         body: {'username': _username});
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
@@ -99,7 +102,7 @@ void doLoginUser() async {
   void doLoginPassword() async {
     final response = await http.post(
         Uri.parse(
-            "https://ubaya.fun/flutter/160419017/images/account/login-password.php"),
+            "https://ubaya.fun/native/160419026/tugas_akhir/account/login-password.php"),
         body: {'username': _username, 'password': _password});
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
@@ -140,7 +143,7 @@ void doLoginUser() async {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Login'), 
+          title: const Text('Login'),
         ),
         body: Container(
             alignment: Alignment.topCenter,
@@ -180,7 +183,13 @@ void doLoginUser() async {
                     textInputPassword
                   ])),
               if (error_login != "")
-                Text(error_login, style: TextStyle(color: Colors.red)),
+                SizedBox(
+                    height: 20,
+                    child: Text(
+                      error_login,
+                      style: TextStyle(color: Colors.red),
+                      textAlign: TextAlign.center,
+                    )),
               Padding(
                   padding: const EdgeInsets.all(10),
                   child: Container(
@@ -199,8 +208,10 @@ void doLoginUser() async {
                           setState(() {
                             status = 0;
                             error_login = "";
-                            height = 100;
+                            height = 101;
                             textInputPassword = Text("");
+                            countWrong = 0;
+                            controllerPassword.text = "";
                           });
 
                           Navigator.push(

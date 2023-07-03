@@ -23,7 +23,7 @@ class _SensorListState extends State<SensorList> {
   Future<String> fetchData() async {
     final response = await http.post(
         Uri.parse(
-            "https://ubaya.fun/flutter/160419017/images/sensor/sensorlist.php"),
+            "https://ubaya.fun/native/160419026/tugas_akhir/sensor/sensorlist.php"),
         body: {'raspberry_id': widget.raspberry_id});
     if (response.statusCode == 200) {
       return response.body;

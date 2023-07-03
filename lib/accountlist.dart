@@ -20,7 +20,7 @@ class _AccountListState extends State<AccountList> {
   Future<String> fetchData() async {
     final response = await http.post(
       Uri.parse(
-          "https://ubaya.fun/flutter/160419017/images/account/daftaraccount.php"),
+          "https://ubaya.fun/native/160419026/tugas_akhir/account/daftaraccount.php"),
     );
     if (response.statusCode == 200) {
       return response.body;

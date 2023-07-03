@@ -27,7 +27,7 @@ class CreateAccountState extends State<CreateAccount> {
   void submit(BuildContext context) async {
     final response = await http.post(
         Uri.parse(
-            "https://ubaya.fun/flutter/160419017/images/account/createaccount.php"),
+            "https://ubaya.fun/native/160419026/tugas_akhir/account/createaccount.php"),
         body: {
           'username': username,
           'email': email,
@@ -206,7 +206,7 @@ class CreateAccountState extends State<CreateAccount> {
                               Map json;
                               var response = await http.post(
                                   Uri.parse(
-                                      "https://ubaya.fun/flutter/160419017/images//jabatan.php"),
+                                      "https://ubaya.fun/native/160419026/tugas_akhir/jabatan.php"),
                                   body: {'cari': text});
 
                               if (response.statusCode == 200) {

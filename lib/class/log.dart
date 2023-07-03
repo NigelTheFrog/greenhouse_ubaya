@@ -1,6 +1,7 @@
 class Log {
   final String tanggal;
-  final double? value, average;
+  final num? value;
+  final double? average;
   final String? timestamp, status;
 
   Log({
@@ -9,16 +10,15 @@ class Log {
     this.timestamp,
     this.average,
     required this.tanggal,
-    
   });
 
   factory Log.fromJson(Map<String, dynamic> json) {
     return Log(
-        value: json['value'] as double?,
+        value: json['value'] as num?,
         timestamp: json['timestamp'] as String?,
         tanggal: json['tanggal'] as String,
         status: json['status'] as String?,
-        average: json['average'] as double?);
-   
+        average: json['average'] as double?
+        );
   }
 }

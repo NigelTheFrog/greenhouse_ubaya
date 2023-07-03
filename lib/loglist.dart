@@ -37,7 +37,7 @@ class _LogListState extends State<LogList> {
 
   Future<String> fetchData() async {
     final response = await http.post(
-        Uri.parse("https://ubaya.fun/flutter/160419017/images/log/loglist.php"),
+        Uri.parse("https://ubaya.fun/native/160419026/tugas_akhir/log/loglist.php"),
         body: {'tanggal': date, 'sensor_id': widget.sensor_id});
     if (response.statusCode == 200) {
       return response.body;
@@ -76,13 +76,13 @@ class _LogListState extends State<LogList> {
         Log log = Log.fromJson(mov);
         log2.add(log);
       }
+
       return ListView.builder(
-          scrollDirection: MediaQuery.of(context).size.width >= 600
-              ? Axis.vertical
-              : Axis.horizontal,
+          scrollDirection: Axis.vertical,
           itemCount: 1,
           itemBuilder: (BuildContext ctxt, int index) {
             return DataTable(
+                columnSpacing: 12.0,
                 headingRowHeight: 0,
                 columns: [
                   DataColumn(label: Container()),
@@ -94,8 +94,7 @@ class _LogListState extends State<LogList> {
                             color: MaterialStateColor.resolveWith((states) {
                               if (widget.nama_sensor ==
                                   "Sensor Kelembaban Tanah") {
-                                return element.status ==
-                                        "Menunggu tanah menyerap cairan"
+                                return element.status!.contains("menyerap")
                                     ? Colors.white
                                     : element.value! > 750 ||
                                             element.value! < 250
@@ -123,15 +122,14 @@ class _LogListState extends State<LogList> {
                                 return element.value! > 900 ||
                                         element.value! < 100
                                     ? Color.fromARGB(255, 255, 96, 85)
-                                    : data.average! <= 900 &&
-                                                data.average! >= 400 ||
-                                            data.average! >= 100 &&
-                                                data.average! <= 200
+                                    : element.value! <= 900 &&
+                                                element.value! >= 400 ||
+                                            element.value! >= 100 &&
+                                                element.value! <= 200
                                         ? Color.fromARGB(255, 250, 233, 75)
                                         : Color.fromARGB(255, 72, 225, 85);
                               } else {
-                                return element.status ==
-                                        "Menunggu tanah menyerap cairan"
+                                return element.status!.contains("menyerap")
                                     ? Colors.white
                                     : element.value! < 5.5 || element.value! > 8
                                         ? Color.fromARGB(255, 255, 96, 85)
@@ -144,14 +142,25 @@ class _LogListState extends State<LogList> {
                               }
                             }),
                             cells: [
-                              DataCell(Text(
+                              DataCell(Center(
+                                  child: (Text(
                                 element.value.toString(),
                                 textAlign: TextAlign.center,
-                              )),
-                              DataCell(Text(element.status.toString(),
-                                  textAlign: TextAlign.center)),
-                              DataCell(Text(element.timestamp.toString(),
-                                  textAlign: TextAlign.center)),
+                              )))),
+                              DataCell(Center(
+                                  child: (Text(
+                                element.status.toString(),
+                                textAlign: TextAlign.center,
+                              )))),
+                              DataCell(Center(
+                                  child: (Text(
+                                element.timestamp.toString(),
+                                textAlign: TextAlign.center,
+                              )))),
+                              // DataCell(Text(element.status.toString(),
+                              //     textAlign: TextAlign.center)),
+                              // DataCell(Text(element.timestamp.toString(),
+                              //     textAlign: TextAlign.center)),
                             ]))
                     .toList());
           });
@@ -244,7 +253,7 @@ class _LogListState extends State<LogList> {
                 widget.nama_sensor == "Sensor Kelembaban Tanah"
                     ? "\nSTANDAR PENGUKURAN \nSENSOR KELEMBABAN TANAH"
                     : widget.nama_sensor == "Sensor Cahaya"
-                        ? ""
+                        ? "\nSTANDAR PENGUKURAN \nSENSOR CAHAYA"
                         : widget.nama_sensor == "Sensor Suhu"
                             ? "\nSTANDAR PENGUKURAN \nSENSOR SUHU RUANGAN"
                             : "\nSTANDAR PENGUKURAN \nSENSOR KEASAMAN TANAH",
@@ -259,24 +268,31 @@ class _LogListState extends State<LogList> {
             child: widget.nama_sensor == "Sensor Kelembaban Tanah"
                 ? Image.asset("assets/images/legend-soil-moisture.png")
                 : widget.nama_sensor == "Sensor Cahaya"
-                    ? Image.asset("")
+                    ? Image.asset("assets/images/legend-light.png")
                     : widget.nama_sensor == "Sensor Suhu"
                         ? Image.asset("assets/images/legend-temperature.png")
                         : Image.asset("assets/images/legend-ph.png"),
           ),
           Container(
-            width: 450,
+            width: 500,
             alignment: Alignment.topCenter,
             padding: EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Value",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text("Status", style: TextStyle(fontWeight: FontWeight.bold)),
-                Text("Timestamp", style: TextStyle(fontWeight: FontWeight.bold))
+                Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text("Value",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center)),
+                Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text("Status",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center)),
+                Text("Timestamp",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center),
               ],
             ),
           ),

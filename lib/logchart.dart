@@ -43,7 +43,7 @@ class _LogChartState extends State<LogChart> {
   Future<String> fetchData() async {
     final response = await http.post(
         Uri.parse(
-            "https://ubaya.fun/flutter/160419017/images/log/logchart.php"),
+            "https://ubaya.fun/native/160419026/tugas_akhir/log/logchart.php"),
         body: {
           'startdate': startdate,
           'enddate': enddate,
@@ -70,11 +70,11 @@ class _LogChartState extends State<LogChart> {
     _loadData();
     initializeDateFormatting();
     var date = DateTime.now();
-    startdatecontroller.text = DateFormat.yMMMMEEEEd('id').format(date);
-    enddatecontroller.text = DateFormat.yMMMMEEEEd('id')
-        .format(DateTime(date.year, date.month, date.day + 7));
-    startdate = date.toString().substring(0, 10);
-    enddate = DateTime(date.year, date.month, date.day + 7)
+    enddatecontroller.text = DateFormat.yMMMMEEEEd('id').format(date);
+    startdatecontroller.text = DateFormat.yMMMMEEEEd('id')
+        .format(DateTime(date.year, date.month, date.day - 7));
+    enddate = date.toString().substring(0, 10);
+    startdate = DateTime(date.year, date.month, date.day - 7)
         .toString()
         .substring(0, 10);
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {

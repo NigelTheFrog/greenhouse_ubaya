@@ -79,7 +79,7 @@ class AddSensorState extends State<AddSensor> {
     print(satuan);
     final response = await http.post(
         Uri.parse(
-            "https://ubaya.fun/flutter/160419017/images/sensor/addsensor.php"),
+            "https://ubaya.fun/native/160419026/tugas_akhir/sensor/addsensor.php"),
         body: {
           'raspberry_id': widget.raspberry_id,
           'id': "${sensor_port}-$id-${actuator_port}-${widget.raspberry_id}",

@@ -12,8 +12,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailTroubleShoot extends StatefulWidget {
-  String id, nama_sensor;
-  DetailTroubleShoot({super.key, required this.id, required this.nama_sensor});
+  String id, nama_sensor, error_code;
+  DetailTroubleShoot(
+      {super.key,
+      required this.id,
+      required this.nama_sensor,
+      required this.error_code});
   @override
   _DetailTroubleShootState createState() {
     return _DetailTroubleShootState();
@@ -32,8 +36,9 @@ class _DetailTroubleShootState extends State<DetailTroubleShoot> {
 
   Future<String> fetchData() async {
     final response = await http.post(
-        Uri.parse("https://ubaya.fun/flutter/160419017/images/detailerror.php"),
-        body: {'id': widget.id});
+        Uri.parse(
+            "https://ubaya.fun/native/160419026/tugas_akhir/error/detailerror.php"),
+        body: {'id': widget.id, 'error_code': widget.error_code});
     if (response.statusCode == 200) {
       return response.body;
     } else {
@@ -78,7 +83,9 @@ class _DetailTroubleShootState extends State<DetailTroubleShoot> {
                     ? Image.asset("assets/images/light-sensor.jpg")
                     : widget.nama_sensor == "Sensor Suhu"
                         ? Image.asset("assets/images/dht-11.jpg")
-                        : Image.asset("assets/images/dht-11.jpg")),
+                        : widget.nama_sensor == "Sensor pH"
+                            ? Image.asset("assets/images/ph.jpg")
+                            : Image.asset("assets/images/water-sensor.png")),
         // : Image.file(_avatar_proses!),
 
         Text(
